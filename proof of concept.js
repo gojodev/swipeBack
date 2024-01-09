@@ -14,3 +14,17 @@ function detectTrackPad(e) {
 
 document.addEventListener("mousewheel", detectTrackPad);
 document.addEventListener("DOMMouseScroll", detectTrackPad);
+
+function oldertry() {
+    document.addEventListener("mousewheel", (e) => {
+      // detect the track pad
+      if (e.deltaX > 30) {
+        // console.log("forwards");
+        window.history.forward();
+      }
+      else {
+        // console.log("backwards");
+        window.history.back();
+      }
+    });
+  }
