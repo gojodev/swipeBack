@@ -1,48 +1,25 @@
-var isDragging = false;
-var startX = 0;
-var startY = 0;
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/scroll_event#Example
+// ! mousewheel is likely the correct event listener for X movement
 
-function detectTrackPad(e) {
-    if (isDragging) {
-        // Calculate the horizontal movement
-        var deltaX = e.touches[0].clientX - startX;
+var SCROLL_AMOUNT = 25;
+function oldertry() {
+    // mousewheel also works for trhe trackpad
+    document.addEventListener("mousewheel", (e) => {
+        let deltaX = e.deltaX;
+        if (deltaX != 0 && Math.abs(deltaX) > SCROLL_AMOUNT) {
 
-        // Assuming a threshold of 50 pixels for horizontal movement
-        if (Math.abs(deltaX) > 50) {
-            console.log("forwards");
-            // Perform your desired action here, e.g., navigate tabs
-            window.history.forward();
+            if (deltaX < SCROLL_AMOUNT) {
+                // ! sometimes goes to locahost (the vert start instead of of the previous tab)
+                window.history.back();
+                console.log("from the left")
+            }
+
+            else {
+                window.history.forward();
+                console.log("from the right");
+            }
         }
-
-        if (Math.abs(deltaX) < 50) {
-            console.log("backwards");
-            window.history.back();
-        }
-
-        // Reset the values after processing the drag
-        isDragging = false;
-        startX = 0;
-        startY = 0;
-    }
+    });
 }
 
-function handleTouchStart(e) {
-    if (e.touches.length === 2) {
-        isDragging = true;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-    }
-}
-
-function handleTouchEnd() {
-    if (isDragging) {
-        // Reset the values if the drag is interrupted or completed
-        isDragging = false;
-        startX = 0;
-        startY = 0;
-    }
-}
-
-document.addEventListener("touchstart", handleTouchStart);
-document.addEventListener("touchmove", detectTrackPad);
-document.addEventListener("touchend", handleTouchEnd);
+oldertry()
