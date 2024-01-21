@@ -15,7 +15,7 @@ function detectTrackPad(e) {
 document.addEventListener("mousewheel", detectTrackPad);
 document.addEventListener("DOMMouseScroll", detectTrackPad);
 
-function oldertry() {
+function currentTry() {
   document.addEventListener("mousewheel", (e) => {
     // detect the track pad
     if (e.deltaX > 30) {

@@ -2,7 +2,7 @@
 // ! mousewheel is likely the correct event listener for X movement
 
 var SCROLL_AMOUNT = 25;
-function oldertry() {
+function currentTry() {
     // mousewheel also works for trhe trackpad
     document.addEventListener("mousewheel", (e) => {
         let deltaX = e.deltaX;
@@ -22,4 +22,4 @@ function oldertry() {
     });
 }
 
-oldertry()
+currentTry()
