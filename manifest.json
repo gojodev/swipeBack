@@ -1,11 +1,13 @@
 {
     "manifest_version": 2,
-    "name": "Gesture Tab Navigator",
+    "name": "SwipeBack",
     "version": "1.0",
     "description": "Navigate tabs with finger gestures",
     "permissions": [
         "tabs",
-        "activeTab"
+        "activeTab",
+        "background",
+        "runtime"
     ],
     "background": {
         "scripts": [
@@ -36,5 +38,8 @@
             },
             "description": "Perform a backward gesture"
         }
+    },
+    "browser_action": {
+        "default_popup": "popup.html"
     }
 }
