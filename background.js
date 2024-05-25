@@ -1,3 +1,5 @@
+console.log('Background script running...');
+
 chrome.runtime.onInstalled.addListener(function () {
   console.log("Gesture Tab Navigator extension installed.");
 
