@@ -25,7 +25,7 @@ function handleWheelEvent(e) {
 document.addEventListener("mousewheel", handleWheelEvent);
 
 /**
- * allows the browser to properly execute the last gesture action
+ * allows the browser to properly execute the most recent gesture action
  * so this service doesn't go backwards or forwards to more pages than it should
  *  */
 window.addEventListener('beforeunload', () => {
