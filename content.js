@@ -1,34 +1,33 @@
-// todo just need to fix some warning in the console
 var SCROLL_AMOUNT = 25;
-
-function logMessage(message) {
-    chrome.runtime.sendMessage(message);
-}
 
 function handleWheelEvent(e) {
     let deltaX = e.deltaX;
+    console.log(Math.abs(deltaX));
     if (deltaX !== 0 && Math.abs(deltaX) > SCROLL_AMOUNT) {
         if (deltaX < 0) {
-            window.history.back();
-            console.log("from the left");
-            logMessage('backwards');
+            try {
+                window.history.back();
+            }
+            catch {
+                console.log('previous page does not exist');
+            }
         } else {
-            window.history.forward();
-            console.log("from the right");
-            logMessage('forward');
+            try {
+                window.history.forward();
+            }
+            catch {
+                console.log('forward page does not exist');
+            }
         }
     }
 }
 
-function currentTry() {
-    // mousewheel also works for the trackpad
-    document.addEventListener("mousewheel", handleWheelEvent);
+document.addEventListener("mousewheel", handleWheelEvent);
 
-    // Cleanup event listener on page unload
-    window.addEventListener('beforeunload', function () {
-        document.removeEventListener("mousewheel", handleWheelEvent);
-    });
-}
-
-currentTry();
-logMessage('Content script loaded');
+/**
+ * allows the browser to properly execute the last gesture action
+ * so this service doesn't go backwards or forwards to more pages than it should
+ *  */
+window.addEventListener('beforeunload', () => {
+    document.removeEventListener("mousewheel", handleWheelEvent);
+});
