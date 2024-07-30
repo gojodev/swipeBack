@@ -1,0 +1,113 @@
+/* https://freefrontend.com/css-arrows/ */
+/* https://codepen.io/RenMan/pen/jwWKMb */
+/* Arrow style author: Ed Tschoepe June 9, 2017 */
+
+.leftPos {
+    top: 50%;
+    position: absolute;
+}
+
+.rightPos {
+    top: 50%;
+    right: 0px;
+    position: absolute;
+}
+
+.arrowContainer {
+    width: 30px;
+    height: 30px;
+    margin: 40px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.arrowLeft {
+    width: 30px;
+    height: 30px;
+    border: black 15px solid;
+    border-color: black transparent transparent black;
+    transform: rotate(-45deg);
+}
+
+.arrowRight {
+    width: 30px;
+    height: 30px;
+    border: black 15px solid;
+    border-color: black transparent transparent black;
+    transform: rotate(135deg);
+}
+
+.arrowSlidingLeft {
+    position: absolute;
+    -webkit-animation: slide 1s linear infinite;
+    animation: slide 1s linear infinite;
+}
+
+.arrowSlidingRight {
+    position: absolute;
+    -webkit-animation: slide 1s linear infinite;
+    animation: slide 1s linear infinite;
+    animation-direction: reverse;
+}
+
+
+.delay1 {
+    -webkit-animation-delay: 0.1s;
+    animation-delay: 0.1s;
+}
+
+.delay2 {
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+}
+
+.delay3 {
+    -webkit-animation-delay: 0.3s;
+    animation-delay: 0.3s;
+}
+
+@-webkit-keyframes slide {
+    0% {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+
+    20% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translateX(-0px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+}
+
+@keyframes slide {
+    0% {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+
+    20% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translateX(-0px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+}
