@@ -98,14 +98,6 @@ var inactivityTimeout;
 var moveID;
 var navAPI = typeof navigation === 'undefined';
 
-function hide(id) {
-    document.getElementById(id).style.opacity = 0;
-}
-
-function show(id) {
-    document.getElementById(id).style.opacity = 1;
-}
-
 function showAnimation(amt, id) {
     let element = document.getElementById(id);
     element.style.transition = 'none';
@@ -117,13 +109,19 @@ function showAnimation(amt, id) {
     element.style.opacity = 1;
     if (amt >= DISPLAY_AMOUNT) {
         if (id === "leftArrow") {
-            hide(id);
             history.back();
         } else {
-            hide(id);
             history.forward();
         }
     }
+}
+
+function hide(id) {
+    document.getElementById(id).style.opacity = 0;
+}
+
+function show(id) {
+    document.getElementById(id).style.opacity = 1;
 }
 
 function translate(amt, id) {

@@ -3,6 +3,12 @@
     "name": "SwipeBack",
     "version": "1.0",
     "description": "Navigate tabs with finger gestures",
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
     "content_scripts": [
         {
             "matches": [
@@ -12,6 +18,9 @@
                 "content.js"
             ]
         }
+    ],
+    "permissions": [
+        "webRequest"
     ],
     "commands": {
         "forwardGesture": {
