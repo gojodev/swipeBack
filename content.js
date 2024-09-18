@@ -1,4 +1,3 @@
-// todo gotta create DOM elements for client ('leftArrow' and 'rightArrow')
 
 function createDiv() {
     return document.createElement('div');
@@ -90,7 +89,6 @@ function hideArrows() {
 
 hideArrows();
 
-var TRIGGER_AMOUNT = 150; // the actual trigger amount
 var DISPLAY_AMOUNT = 125; // how far it goes on the screen
 var updateLeftPos = 0;
 var updateRightPos = 0;
@@ -106,7 +104,8 @@ function show(id) {
     document.getElementById(id).style.opacity = 1;
 }
 
-function showAnimation(amt, id) {
+import { bool } from './popup.js';
+function showAnimation(amt, id, bool) {
     let element = document.getElementById(id);
     element.style.transition = 'none';
     element.style.top = '50%';
@@ -114,7 +113,13 @@ function showAnimation(amt, id) {
 
     amt = Math.abs(amt);
 
-    element.style.opacity = 1;
+    if (bool) {
+        element.style.opacity = 1;
+    }
+    else {
+        element.style.opacity = 0;
+    }
+
     if (amt >= DISPLAY_AMOUNT) {
         if (id === "leftArrow") {
             hide(id);
@@ -127,7 +132,6 @@ function showAnimation(amt, id) {
 }
 
 function translate(amt, id) {
-    // const progress = Math.min(amt / TRIGGER_AMOUNT, 1);
     const element = document.getElementById(id);
 
     // ? compatibility concern for firefox - https://developer.mozilla.org/en-US/docs/Web/API/Navigation/canGoForward#browser_compatibility
@@ -138,7 +142,7 @@ function translate(amt, id) {
         element.style.transform = `translate(${updateLeftPos}px)`;
         element.style.left = '0px';
 
-        showAnimation(updateLeftPos, id);
+        showAnimation(updateLeftPos, id, bool);
     }
 
     else if (id == "rightArrow" && updateRightPos < DISPLAY_AMOUNT && (navAPI || navigation.canGoForward)) {
@@ -148,7 +152,7 @@ function translate(amt, id) {
         element.style.transform = `translate(-${updateRightPos}px)`;
         element.style.right = '0px';
 
-        showAnimation(updateRightPos, id);
+        showAnimation(updateRightPos, id, bool);
     }
 }
 

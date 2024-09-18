@@ -1,5 +1,3 @@
-// todo gotta create DOM elements for client ('leftArrow' and 'rightArrow')
-
 function createDiv() {
     return document.createElement('div');
 }

@@ -1,0 +1,61 @@
+body {
+    background-color: black;
+    color: white;
+    margin: auto;
+    height: 150px;
+    width: 200px;
+}
+
+main {
+    margin: auto;
+}
+
+#title {
+    display: flex;
+    text-align: center;
+    align-items: center;
+}
+
+#gojodev {
+    width: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    margin: 10px;
+}
+
+
+.test {
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform, 0.2s;
+}
+
+
+#gojodev:hover {
+    transform: scale(1.05);
+}
+
+#options {
+    margin: auto;
+    justify-content: center;
+    padding: 10px;
+    text-align: center;
+}
+
+.box-shadow {
+    box-shadow: 5px 5px 5px #aaaaaa;
+}
+
+label {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
