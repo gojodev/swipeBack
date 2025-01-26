@@ -1,3 +1,5 @@
+console.log("SwipeBack content script loaded!");
+
 function createDiv() {
     return document.createElement('div');
 }
@@ -127,7 +129,6 @@ function showAnimation(amt, id) {
 }
 
 function translate(amt, id) {
-    // const progress = Math.min(amt / TRIGGER_AMOUNT, 1);
     const element = document.getElementById(id);
 
     // ? compatibility concern for firefox - https://developer.mozilla.org/en-US/docs/Web/API/Navigation/canGoForward#browser_compatibility
