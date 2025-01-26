@@ -131,8 +131,7 @@ function showAnimation(amt, id) {
 function translate(amt, id) {
     const element = document.getElementById(id);
 
-    // ? compatibility concern for firefox - https://developer.mozilla.org/en-US/docs/Web/API/Navigation/canGoForward#browser_compatibility
-    if (id == "leftArrow" && updateLeftPos < DISPLAY_AMOUNT && (navAPI || navigation.canGoBack)) {
+    if (id === "leftArrow" && updateLeftPos < DISPLAY_AMOUNT) {
         show(id);
         hide('rightArrow');
         updateLeftPos += amt;
@@ -140,9 +139,7 @@ function translate(amt, id) {
         element.style.left = '0px';
 
         showAnimation(updateLeftPos, id);
-    }
-
-    else if (id == "rightArrow" && updateRightPos < DISPLAY_AMOUNT && (navAPI || navigation.canGoForward)) {
+    } else if (id === "rightArrow" && updateRightPos < DISPLAY_AMOUNT) {
         show(id);
         hide('leftArrow');
         updateRightPos += amt;
