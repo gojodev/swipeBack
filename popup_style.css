@@ -1,20 +1,18 @@
 body {
     background-color: black;
     color: white;
-    margin: auto;
-    height: 150px;
-    width: 200px;
-}
-
-main {
-    margin: auto;
-}
-
-#title {
+    width: auto;
     display: flex;
-    text-align: center;
+    justify-content: center;
     align-items: center;
 }
+
+.center {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
 
 #gojodev {
     width: 50px;
@@ -22,40 +20,22 @@ main {
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
-    margin: 10px;
+    animation-name: zoom;
+    animation-iteration-count: infinite;
+    animation-duration: 0.5s;
 }
 
-
-.test {
-    width: 300px;
-    height: 300px;
-    border-radius: 20px;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: center;
-    transition: transform, 0.2s;
-}
-
-
-#gojodev:hover {
-    transform: scale(1.05);
-}
-
-#options {
-    margin: auto;
-    justify-content: center;
-    padding: 10px;
+.container {
     text-align: center;
+    margin: 20px;
 }
 
-.box-shadow {
-    box-shadow: 5px 5px 5px #aaaaaa;
-}
+@keyframes zoom {
+    from {
+        transform: scale(1);
+    }
 
-label {
-    background-color: black;
-    color: white;
-    padding: 10px;
-    border-radius: 20px;
-    margin-bottom: 10px;
+    to {
+        transform: scale(1.05);
+    }
 }
