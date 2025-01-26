@@ -1,4 +1,3 @@
-
 function createDiv() {
     return document.createElement('div');
 }
@@ -89,7 +88,8 @@ function hideArrows() {
 
 hideArrows();
 
-var DISPLAY_AMOUNT = 125; // how far it goes on the screen
+const TRIGGER_AMOUNT = 150; // the actual trigger amount
+const DISPLAY_AMOUNT = 125; // how far it goes on the screen
 var updateLeftPos = 0;
 var updateRightPos = 0;
 var inactivityTimeout;
@@ -104,8 +104,7 @@ function show(id) {
     document.getElementById(id).style.opacity = 1;
 }
 
-import { bool } from './popup.js';
-function showAnimation(amt, id, bool) {
+function showAnimation(amt, id) {
     let element = document.getElementById(id);
     element.style.transition = 'none';
     element.style.top = '50%';
@@ -113,13 +112,7 @@ function showAnimation(amt, id, bool) {
 
     amt = Math.abs(amt);
 
-    if (bool) {
-        element.style.opacity = 1;
-    }
-    else {
-        element.style.opacity = 0;
-    }
-
+    element.style.opacity = 1;
     if (amt >= DISPLAY_AMOUNT) {
         if (id === "leftArrow") {
             hide(id);
@@ -132,6 +125,7 @@ function showAnimation(amt, id, bool) {
 }
 
 function translate(amt, id) {
+    // const progress = Math.min(amt / TRIGGER_AMOUNT, 1);
     const element = document.getElementById(id);
 
     // ? compatibility concern for firefox - https://developer.mozilla.org/en-US/docs/Web/API/Navigation/canGoForward#browser_compatibility
@@ -142,7 +136,7 @@ function translate(amt, id) {
         element.style.transform = `translate(${updateLeftPos}px)`;
         element.style.left = '0px';
 
-        showAnimation(updateLeftPos, id, bool);
+        showAnimation(updateLeftPos, id);
     }
 
     else if (id == "rightArrow" && updateRightPos < DISPLAY_AMOUNT && (navAPI || navigation.canGoForward)) {
@@ -152,7 +146,7 @@ function translate(amt, id) {
         element.style.transform = `translate(-${updateRightPos}px)`;
         element.style.right = '0px';
 
-        showAnimation(updateRightPos, id, bool);
+        showAnimation(updateRightPos, id);
     }
 }
 
@@ -178,3 +172,7 @@ window.addEventListener('beforeunload', () => {
 });
 
 document.addEventListener("wheel", handleWheelEvent);
+
+// to isolate and view the animation itself
+// showAnimation(0, "leftArrow", true);
+// document.getElementById("leftArrow").style.transform = `translate(${500}px)`;
