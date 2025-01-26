@@ -80,13 +80,15 @@ function createArrows() {
 createArrows();
 
 function hideArrows() {
-    document.getElementById("leftArrow").style.opacity = 0;
-    document.getElementById("rightArrow").style.opacity = 0;
+    document.getElementById("leftArrow").style.opacity = "0";
+    document.getElementById("rightArrow").style.opacity = "0";
     updateLeftPos = 0;
     updateRightPos = 0;
 }
 
 hideArrows();
+
+document.body.addEventListener("onload", hideArrows)
 
 const TRIGGER_AMOUNT = 150; // the actual trigger amount
 const DISPLAY_AMOUNT = 125; // how far it goes on the screen
