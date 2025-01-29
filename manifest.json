@@ -34,8 +34,7 @@
     ],
     "permissions": [
         "activeTab",
-        "scripting",
-        "history"
+        "scripting"
     ],
     "background": {
         "service_worker": "background.js"
