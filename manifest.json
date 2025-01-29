@@ -26,6 +26,9 @@
             ],
             "css": [
                 "style.css"
+            ],
+            "matches": [
+                "<all_urls>"
             ]
         }
     ],
