@@ -14,7 +14,6 @@ swipeBack
 ├─ page2.html
 ├─ page3.html
 ├─ popup.html
-├─ popup.js
 ├─ popup_style.css
 ├─ README.md
 ├─ style.css
