@@ -118,7 +118,7 @@ function showAnimation(amt, id) {
 
   element.style.opacity = 1;
 
-  if (amt >= DISPLAY_AMOUNT && window.devicePixelRatio >= 1.25) {
+  if (amt >= DISPLAY_AMOUNT) {
     if (id === "leftArrow") {
       hide(id);
       history.back();
@@ -131,7 +131,6 @@ function showAnimation(amt, id) {
 
 function translate(amt, id) {
   const element = document.getElementById(id);
-
   if (id === "leftArrow" && updateLeftPos < DISPLAY_AMOUNT) {
     show(id);
     hide("rightArrow");
@@ -168,7 +167,11 @@ function handleWheelEvent(e) {
 }
 
 window.addEventListener("beforeunload", () => {
-  document.removeEventListener("mousewheel", handleWheelEvent);
+  document.removeEventListener("mousewheel", () => {
+    if (window.visualViewport.scale === 1) {
+      handleWheelEvent;
+    }
+  });
 });
 
 document.addEventListener("wheel", handleWheelEvent);
