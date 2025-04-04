@@ -1,121 +1,133 @@
 body {
-    overflow-x: hidden;
+  overflow-x: hidden;
 }
 
 .leftPos {
-    top: 50%;
-    position: absolute;
+  top: 50%;
+  position: absolute;
 }
 
 .rightPos {
-    top: 50%;
-    right: 10px;
-    position: absolute;
+  top: 50%;
+  right: 10px;
+  position: absolute;
 }
 
 .arrowContainer {
-    width: 30px;
-    height: 30px;
-    margin: 40px;
-    z-index: 1;
+  width: 30px;
+  height: 30px;
+  margin: 40px;
+  z-index: 1;
 }
 
 .arrowLeft {
-    width: 30px;
-    height: 30px;
-    border: black 15px solid;
-    border-color: black transparent transparent black;
-    transform: rotate(-45deg);
+  width: 30px;
+  height: 30px;
+  border: black 15px solid;
+  border-color: black transparent transparent black;
+  transform: rotate(-45deg);
 }
 
 .arrowRight {
-    width: 30px;
-    height: 30px;
-    border: black 15px solid;
-    border-color: black transparent transparent black;
-    transform: rotate(135deg);
+  width: 30px;
+  height: 30px;
+  border: black 15px solid;
+  border-color: black transparent transparent black;
+  transform: rotate(135deg);
 }
 
 .arrowSlidingLeft {
-    position: absolute;
-    animation: slideLeft 0.5s linear infinite;
+  position: absolute;
+  animation: slideLeft 0.5s linear infinite;
 }
 
 .arrowSlidingRight {
-    position: absolute;
-    animation: slideRight 0.5s linear infinite;
+  position: absolute;
+  animation: slideRight 0.5s linear infinite;
 }
 
-
 .delay1 {
-    animation-delay: 0.1s;
+  animation-delay: 0.1s;
 }
 
 .delay2 {
-    animation-delay: 0.2s;
+  animation-delay: 0.2s;
 }
 
 .delay3 {
-    animation-delay: 0.3s;
+  animation-delay: 0.3s;
 }
 
 @keyframes slideLeft {
-    0% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
 
-    50%, 75% {
-        opacity: 1;
-        transform: translateX(-50%);
-    }
+  50%,
+  75% {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
 
-    100% {
-        opacity: 0;
-        transform: translateX(-50%);
-    }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
 }
 
-
 @keyframes slideRight {
-    0% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
 
-    50%, 75% {
-        opacity: 1;
-        transform: translateX(50%);
-    }
+  50%,
+  75% {
+    opacity: 1;
+    transform: translateX(50%);
+  }
 
-    100% {
-        opacity: 0;
-    }
+  100% {
+    opacity: 0;
+  }
 }
 
 .hideLeft {
-    animation: hideL 0.5s linear 1 forwards;
+  animation: hideL 0.5s linear 1 forwards;
 }
 
 @keyframes hideL {
-    from {
-        opacity: 1;
-    }
+  from {
+    opacity: 1;
+  }
 
-    to {
-        opacity: 0;
-    }
+  to {
+    opacity: 0;
+  }
 }
 
 .hideRight {
-    animation: hideR 0.5s linear 1 forwards;
+  animation: hideR 0.5s linear 1 forwards;
 }
 
 @keyframes hideR {
-    from {
-        opacity: 1;
-    }
+  from {
+    opacity: 1;
+  }
 
-    to {
-        opacity: 0;
-        transform: translateX(100%);
-    }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.my_scroll_div {
+  height: 100px;
+  width: 80%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  max-height: 100px;
+  white-space: nowrap;
+  display: inline-block;
+  border: 10px solid black;
+  border-radius: 20px;
 }

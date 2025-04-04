@@ -150,19 +150,38 @@ function translate(amt, id) {
   }
 }
 
-function handleWheelEvent(e) {
-  let deltaX = e.deltaX;
-  if (deltaX !== 0) {
-    if (deltaX < 0) {
-      moveID = "left";
-      translate(Math.abs(deltaX), "leftArrow");
-    } else {
-      moveID = "right";
-      translate(Math.abs(deltaX), "rightArrow");
-    }
+function isElementScrollable(element) {
+  const style = window.getComputedStyle(element);
+  const hasOverflowY =
+    style.overflowY === "auto" || style.overflowY === "scroll";
+  const hasOverflowX =
+    style.overflowX === "auto" || style.overflowX === "scroll";
 
-    clearTimeout(inactivityTimeout);
-    inactivityTimeout = setTimeout(hideArrows, 100);
+  const hasScrollableY = element.scrollHeight > element.clientHeight;
+  const hasScrollableX = element.scrollWidth > element.clientWidth;
+
+  return (hasOverflowY && hasScrollableY) || (hasOverflowX && hasScrollableX);
+}
+
+function handleWheelEvent(e) {
+  const element = e.target;
+  const isScrollable = isElementScrollable(element);
+
+  if (isScrollable == false) {
+    console.log("Is scrollable:", isScrollable);
+    let deltaX = e.deltaX;
+    if (deltaX !== 0) {
+      if (deltaX < 0) {
+        moveID = "left";
+        translate(Math.abs(deltaX), "leftArrow");
+      } else {
+        moveID = "right";
+        translate(Math.abs(deltaX), "rightArrow");
+      }
+
+      clearTimeout(inactivityTimeout);
+      inactivityTimeout = setTimeout(hideArrows, 100);
+    }
   }
 }
 
