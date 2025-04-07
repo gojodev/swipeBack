@@ -90,7 +90,15 @@ function hideArrows() {
 
 hideArrows();
 
-document.body.addEventListener("onload", hideArrows);
+function initializeSwipeNavigation() {
+  createArrows();
+  hideArrows();
+  updateLeftPos = 0;
+  updateRightPos = 0;
+  document.addEventListener("wheel", handleWheelEvent);
+}
+
+document.addEventListener("DOMContentLoaded", initializeSwipeNavigation);
 
 const TRIGGER_AMOUNT = 150; // the actual trigger amount
 const DISPLAY_AMOUNT = 125; // how far it goes on the screen
@@ -167,9 +175,9 @@ function handleWheelEvent(e) {
   const element = e.target;
   const isScrollable = isElementScrollable(element);
 
-  if (isScrollable == false) {
-    console.log("Is scrollable:", isScrollable);
+  if (!isScrollable) {
     let deltaX = e.deltaX;
+    console.log(deltaX)
     if (deltaX !== 0) {
       if (deltaX < 0) {
         moveID = "left";
@@ -183,6 +191,7 @@ function handleWheelEvent(e) {
       inactivityTimeout = setTimeout(hideArrows, 100);
     }
   }
+  console.log("Is scrollable:", isScrollable);
 }
 
 window.addEventListener("beforeunload", () => {
@@ -193,7 +202,9 @@ window.addEventListener("beforeunload", () => {
   });
 });
 
-document.addEventListener("wheel", handleWheelEvent);
+window.addEventListener("beforeunload", () => {
+  document.addEventListener("wheel", handleWheelEvent);
+});
 
 // to isolate and view the animation itself
 // showAnimation(0, "leftArrow", true);
