@@ -1,41 +1,63 @@
 body {
-    background-color: black;
-    color: white;
-    width: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: black;
+  color: white;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .center {
-    display: flex;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
-
 #gojodev {
-    width: 50px;
-    border: 2px solid black;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: center;
-    animation-name: zoom;
-    animation-iteration-count: infinite;
-    animation-duration: 0.5s;
+  width: 50px;
+  border: 2px solid black;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  animation-name: zoom;
+  animation-iteration-count: infinite;
+  animation-duration: 0.5s;
 }
 
 .container {
-    text-align: center;
-    margin: 20px;
+  text-align: center;
+  margin: 20px;
 }
 
 @keyframes zoom {
-    from {
-        transform: scale(1);
-    }
+  from {
+    transform: scale(1);
+  }
 
-    to {
-        transform: scale(1.05);
-    }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.status-inactive {
+  background-color: #fdecea;
+  color: #c62828;
+  border: 1px solid #f2c6c4;
+}
+.status-icon {
+  margin-right: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.hidden {
+  display: none;
 }
