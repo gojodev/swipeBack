@@ -19,40 +19,11 @@
           <img src="gojodev.webp" id="gojodev" class="box-shadow" />
         </a>
         <h4>Thanks for using SwipeBack!</h4>
-
         <br />
       </div>
       <h4 style="text-align: center">Created By Emmanuel Koledoye</h4>
     </div>
 
-    <script>
-      function checkContentScriptStatus() {
-        chrome.tabs.query(
-          { active: true, currentWindow: true },
-          function (tabs) {
-            if (tabs.length === 0) return;
-
-            const tabId = tabs[0].id;
-            chrome.tabs.sendMessage(
-              tabId,
-              { action: "checkStatus" },
-              function (response) {
-                const activeIndicator =
-                  document.getElementById("status-active");
-                const inactiveIndicator =
-                  document.getElementById("status-inactive");
-
-                if (chrome.runtime.lastError || !response) {
-                  activeIndicator.classList.remove("hidden");
-                  inactiveIndicator.classList.add("hidden");
-                }
-              }
-            );
-          }
-        );
-      }
-
-      document.addEventListener("DOMContentLoaded", checkContentScriptStatus);
-    </script>
+    <script src="popup.js"></script>
   </body>
 </html>

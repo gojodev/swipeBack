@@ -23,11 +23,12 @@
     {
       "js": ["content.js"],
       "css": ["style.css"],
-      "matches": ["<all_urls>"]
+      "matches": ["<all_urls>"],
+      "run_at": "document_end"
     }
   ],
   "host_permissions": ["*://*/*"],
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "tabs"],
   "background": {
     "service_worker": "background.js"
   },

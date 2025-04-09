@@ -88,25 +88,20 @@ function hideArrows() {
   updateRightPos = 0;
 }
 
-hideArrows();
-
-function initializeSwipeNavigation() {
-  createArrows();
+function init() {
   hideArrows();
   updateLeftPos = 0;
   updateRightPos = 0;
   document.addEventListener("wheel", handleWheelEvent);
 }
 
-document.addEventListener("DOMContentLoaded", initializeSwipeNavigation);
+document.addEventListener("DOMContentLoaded", init);
 
-const TRIGGER_AMOUNT = 150; // the actual trigger amount
-const DISPLAY_AMOUNT = 125; // how far it goes on the screen
+const TRIGGER_AMOUNT = 125; 
 var updateLeftPos = 0;
 var updateRightPos = 0;
 var inactivityTimeout;
 var moveID;
-var navAPI = typeof navigation === "undefined";
 
 function hide(id) {
   document.getElementById(id).style.opacity = 0;
@@ -126,7 +121,7 @@ function showAnimation(amt, id) {
 
   element.style.opacity = 1;
 
-  if (amt >= DISPLAY_AMOUNT) {
+  if (amt >= TRIGGER_AMOUNT) {
     if (id === "leftArrow") {
       hide(id);
       history.back();
@@ -139,7 +134,7 @@ function showAnimation(amt, id) {
 
 function translate(amt, id) {
   const element = document.getElementById(id);
-  if (id === "leftArrow" && updateLeftPos < DISPLAY_AMOUNT) {
+  if (id === "leftArrow" && updateLeftPos < TRIGGER_AMOUNT) {
     show(id);
     hide("rightArrow");
     updateLeftPos += amt;
@@ -147,7 +142,7 @@ function translate(amt, id) {
     element.style.left = "0px";
 
     showAnimation(updateLeftPos, id);
-  } else if (id === "rightArrow" && updateRightPos < DISPLAY_AMOUNT) {
+  } else if (id === "rightArrow" && updateRightPos < TRIGGER_AMOUNT) {
     show(id);
     hide("leftArrow");
     updateRightPos += amt;
@@ -160,15 +155,11 @@ function translate(amt, id) {
 
 function isElementScrollable(element) {
   const style = window.getComputedStyle(element);
-  const hasOverflowY =
-    style.overflowY === "auto" || style.overflowY === "scroll";
   const hasOverflowX =
     style.overflowX === "auto" || style.overflowX === "scroll";
-
-  const hasScrollableY = element.scrollHeight > element.clientHeight;
   const hasScrollableX = element.scrollWidth > element.clientWidth;
 
-  return (hasOverflowY && hasScrollableY) || (hasOverflowX && hasScrollableX);
+  return hasOverflowX && hasScrollableX;
 }
 
 function handleWheelEvent(e) {
@@ -177,7 +168,6 @@ function handleWheelEvent(e) {
 
   if (!isScrollable) {
     let deltaX = e.deltaX;
-    console.log(deltaX)
     if (deltaX !== 0) {
       if (deltaX < 0) {
         moveID = "left";
@@ -191,7 +181,6 @@ function handleWheelEvent(e) {
       inactivityTimeout = setTimeout(hideArrows, 100);
     }
   }
-  console.log("Is scrollable:", isScrollable);
 }
 
 window.addEventListener("beforeunload", () => {
@@ -200,10 +189,6 @@ window.addEventListener("beforeunload", () => {
       handleWheelEvent;
     }
   });
-});
-
-window.addEventListener("beforeunload", () => {
-  document.addEventListener("wheel", handleWheelEvent);
 });
 
 // to isolate and view the animation itself
