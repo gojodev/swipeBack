@@ -11,7 +11,12 @@
     <div class="container">
       <div class="status-indicator status-inactive hidden" id="status-inactive">
         <span class="status-icon">!</span>
-        <span>SwipeBack is not available on this page</span>
+        <span id="status-message">SwipeBack is not available on this page</span>
+      </div>
+      <button id="reload-button" class="hidden">Reload page</button>
+      <div class="nav-buttons hidden" id="nav-buttons">
+        <button id="back-button">&larr; Back</button>
+        <button id="forward-button">Forward &rarr;</button>
       </div>
 
       <div class="center">
@@ -21,6 +26,14 @@
         <h4>Thanks for using SwipeBack!</h4>
         <br />
       </div>
+
+      <label class="setting" for="animations-toggle">
+        <span>Show swipe animation</span>
+        <span class="switch">
+          <input type="checkbox" id="animations-toggle" />
+          <span class="slider"></span>
+        </span>
+      </label>
       <h4 style="text-align: center">Created By Emmanuel Koledoye</h4>
     </div>
 

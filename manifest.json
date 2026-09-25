@@ -28,7 +28,7 @@
     }
   ],
   "host_permissions": ["*://*/*"],
-  "permissions": ["activeTab", "tabs"],
+  "permissions": ["activeTab", "tabs", "storage", "scripting"],
   "background": {
     "service_worker": "background.js"
   },

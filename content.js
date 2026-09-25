@@ -1,196 +1,222 @@
-console.log("SwipeBack content script loaded!");
+const TRIGGER_AMOUNT = 150;
+const GESTURE_GAP_MS = 150;
+const MOMENTUM_SETTLE_MS = 400;
+const MOMENTUM_WINDOW_MS = 1500;
+const TEARDOWN_EVENT = "swipeback:teardown";
+
+let swipeDirection = null;
+let swipeProgress = 0;
+let inactivityTimeout;
+let animationsEnabled = true;
+let armed = true;
+let armTimeout;
+let settledAt = 0;
+let lastWheelTime = null;
+
+const isExtension =
+  typeof chrome !== "undefined" && Boolean(chrome.runtime && chrome.runtime.id);
 
 function createDiv() {
   return document.createElement("div");
 }
 
-function create_arrowLeft() {
-  const arrowLeft = createDiv();
-  arrowLeft.classList.add("arrowLeft");
-  return arrowLeft;
+function createChevron(direction) {
+  const chevron = createDiv();
+  chevron.classList.add(direction === "left" ? "arrowLeft" : "arrowRight");
+  return chevron;
 }
 
-function create_arrowRight() {
-  const arrowRight = createDiv();
-  arrowRight.classList.add("arrowRight");
-  return arrowRight;
+function createArrow(direction) {
+  const arrow = createDiv();
+  arrow.id = `${direction}Arrow`;
+  arrow.style.position = "fixed";
+  arrow.style.top = "50%";
+  arrow.style[direction] = "0px";
+
+  const container = createDiv();
+  container.classList.add("arrowContainer", `${direction}Pos`);
+  arrow.appendChild(container);
+
+  const slidingClass =
+    direction === "left" ? "arrowSlidingLeft" : "arrowSlidingRight";
+  ["", "delay1", "delay2", "delay3"].forEach((delay) => {
+    const sliding = createDiv();
+    sliding.classList.add(slidingClass);
+    if (delay) sliding.classList.add(delay);
+    sliding.appendChild(createChevron(direction));
+    container.appendChild(sliding);
+  });
+
+  document.body.append(arrow);
 }
 
-function createArrows() {
-  const leftArrow = createDiv();
-  leftArrow.id = "leftArrow";
-
-  const leftContainer = createDiv();
-  leftContainer.classList.add("arrowContainer", "leftPos");
-  leftArrow.appendChild(leftContainer);
-
-  const arrowSlidingLeft = createDiv();
-  arrowSlidingLeft.classList.add("arrowSlidingLeft");
-  arrowSlidingLeft.appendChild(create_arrowLeft());
-  leftContainer.appendChild(arrowSlidingLeft);
-
-  const leftdelay1 = createDiv();
-  leftdelay1.classList.add("arrowSlidingLeft", "delay1");
-  leftdelay1.appendChild(create_arrowLeft());
-  leftContainer.appendChild(leftdelay1);
-
-  const leftdelay2 = createDiv();
-  leftdelay2.classList.add("arrowSlidingLeft", "delay2");
-  leftdelay2.appendChild(create_arrowLeft());
-  leftContainer.appendChild(leftdelay2);
-
-  const leftdelay3 = createDiv();
-  leftdelay3.classList.add("arrowSlidingLeft", "delay3");
-  leftdelay3.appendChild(create_arrowLeft());
-  leftContainer.appendChild(leftdelay3);
-  document.body.append(leftArrow);
-
-  // console.log(leftArrow);
-  // ------------------------
-
-  const rightArrow = createDiv();
-  rightArrow.id = "rightArrow";
-
-  const rightContainer = createDiv();
-  rightContainer.classList.add("arrowContainer", "rightPos");
-  rightArrow.appendChild(rightContainer);
-
-  const arrowSlidingRight = createDiv();
-  arrowSlidingRight.classList.add("arrowSlidingRight");
-  arrowSlidingRight.append(create_arrowRight());
-  rightContainer.appendChild(arrowSlidingRight);
-
-  const rightdelay1 = createDiv();
-  rightdelay1.classList.add("arrowSlidingRight", "delay1");
-  rightdelay1.appendChild(create_arrowRight());
-  rightContainer.appendChild(rightdelay1);
-
-  const rightdelay2 = createDiv();
-  rightdelay2.classList.add("arrowSlidingRight", "delay2");
-  rightdelay2.appendChild(create_arrowRight());
-  rightContainer.appendChild(rightdelay2);
-
-  const rightdelay3 = createDiv();
-  rightdelay3.classList.add("arrowSlidingRight", "delay3");
-  rightdelay3.appendChild(create_arrowRight());
-  rightContainer.appendChild(rightdelay3);
-  document.body.append(rightArrow);
-
-  // console.log(rightArrow);
+function arrowFor(direction) {
+  return document.getElementById(`${direction}Arrow`);
 }
 
-createArrows();
-
-function hideArrows() {
-  document.getElementById("leftArrow").style.opacity = "0";
-  document.getElementById("rightArrow").style.opacity = "0";
-  updateLeftPos = 0;
-  updateRightPos = 0;
+function setVisible(element, visible) {
+  element.style.opacity = visible ? "1" : "0";
 }
 
-function init() {
-  hideArrows();
-  updateLeftPos = 0;
-  updateRightPos = 0;
-  document.addEventListener("wheel", handleWheelEvent);
+function resetSwipe() {
+  setVisible(arrowFor("left"), false);
+  setVisible(arrowFor("right"), false);
+  swipeDirection = null;
+  swipeProgress = 0;
 }
 
-document.addEventListener("DOMContentLoaded", init);
-
-const TRIGGER_AMOUNT = 125; 
-var updateLeftPos = 0;
-var updateRightPos = 0;
-var inactivityTimeout;
-var moveID;
-
-function hide(id) {
-  document.getElementById(id).style.opacity = 0;
-}
-
-function show(id) {
-  document.getElementById(id).style.opacity = 1;
-}
-
-function showAnimation(amt, id) {
-  let element = document.getElementById(id);
-  element.style.transition = "none";
-  element.style.top = "50%";
-  element.style.position = "absolute";
-
-  amt = Math.abs(amt);
-
-  element.style.opacity = 1;
-
-  if (amt >= TRIGGER_AMOUNT) {
-    if (id === "leftArrow") {
-      hide(id);
-      history.back();
-    } else {
-      hide(id);
-      history.forward();
-    }
+function navigate(direction) {
+  if (direction === "left") {
+    history.back();
+  } else {
+    history.forward();
   }
 }
 
-function translate(amt, id) {
-  const element = document.getElementById(id);
-  if (id === "leftArrow" && updateLeftPos < TRIGGER_AMOUNT) {
-    show(id);
-    hide("rightArrow");
-    updateLeftPos += amt;
-    element.style.transform = `translate(${updateLeftPos}px)`;
-    element.style.left = "0px";
+function trackSwipe(direction, amount) {
+  if (direction !== swipeDirection) {
+    if (swipeDirection) setVisible(arrowFor(swipeDirection), false);
+    swipeDirection = direction;
+    swipeProgress = 0;
+  }
 
-    showAnimation(updateLeftPos, id);
-  } else if (id === "rightArrow" && updateRightPos < TRIGGER_AMOUNT) {
-    show(id);
-    hide("leftArrow");
-    updateRightPos += amt;
-    element.style.transform = `translate(-${updateRightPos}px)`;
-    element.style.right = "0px";
+  if (swipeProgress >= TRIGGER_AMOUNT) return;
+  swipeProgress += amount;
 
-    showAnimation(updateRightPos, id);
+  const arrow = arrowFor(direction);
+  if (animationsEnabled) {
+    setVisible(arrow, true);
+    const offset = direction === "left" ? swipeProgress : -swipeProgress;
+    arrow.style.transform = `translate(${offset}px)`;
+  }
+
+  if (swipeProgress >= TRIGGER_AMOUNT) {
+    setVisible(arrow, false);
+    navigate(direction);
   }
 }
 
-function isElementScrollable(element) {
-  const style = window.getComputedStyle(element);
-  const hasOverflowX =
-    style.overflowX === "auto" || style.overflowX === "scroll";
-  const hasScrollableX = element.scrollWidth > element.clientWidth;
+function hasScrollRoom(element, deltaX) {
+  const maxScrollLeft = element.scrollWidth - element.clientWidth;
+  if (maxScrollLeft <= 0) return false;
+  return deltaX < 0 ? element.scrollLeft > 0 : element.scrollLeft < maxScrollLeft;
+}
 
-  return hasOverflowX && hasScrollableX;
+function isElementScrollable(element, deltaX) {
+  const { overflowX } = window.getComputedStyle(element);
+  const scrolls = overflowX === "auto" || overflowX === "scroll";
+  return scrolls && hasScrollRoom(element, deltaX);
+}
+
+function isDocumentScrollable(deltaX) {
+  const htmlOverflowX = window.getComputedStyle(document.documentElement).overflowX;
+  const overflowX =
+    htmlOverflowX === "visible"
+      ? window.getComputedStyle(document.body).overflowX
+      : htmlOverflowX;
+  if (overflowX === "hidden" || overflowX === "clip") return false;
+  return hasScrollRoom(document.scrollingElement, deltaX);
+}
+
+function findScrollTarget(element, deltaX) {
+  let node = element;
+  while (node && node !== document.body && node !== document.documentElement) {
+    if (isElementScrollable(node, deltaX)) return node;
+    node = node.parentElement;
+  }
+  return isDocumentScrollable(deltaX) ? document.scrollingElement : null;
+}
+
+function expectMomentumTail() {
+  resetSwipe();
+  armed = false;
+  lastWheelTime = null;
+  settledAt = performance.now() + MOMENTUM_SETTLE_MS;
+  clearTimeout(armTimeout);
+  armTimeout = setTimeout(() => {
+    armed = true;
+  }, MOMENTUM_WINDOW_MS);
 }
 
 function handleWheelEvent(e) {
-  const element = e.target;
-  const isScrollable = isElementScrollable(element);
+  const now = performance.now();
+  if (!armed) {
+    const quietBefore =
+      lastWheelTime === null
+        ? now > settledAt
+        : now - lastWheelTime > GESTURE_GAP_MS;
+    if (quietBefore) armed = true;
+  }
+  lastWheelTime = now;
+  if (!armed) return; // inertial tail carried over from the page we just left
 
-  if (!isScrollable) {
-    let deltaX = e.deltaX;
-    if (deltaX !== 0) {
-      if (deltaX < 0) {
-        moveID = "left";
-        translate(Math.abs(deltaX), "leftArrow");
-      } else {
-        moveID = "right";
-        translate(Math.abs(deltaX), "rightArrow");
-      }
+  if (e.ctrlKey || window.visualViewport.scale > 1.01) return; // pinch-zooming, or already zoomed in
 
-      clearTimeout(inactivityTimeout);
-      inactivityTimeout = setTimeout(hideArrows, 100);
-    }
+  const deltaX = e.deltaX;
+  if (deltaX === 0) return;
+
+  if (findScrollTarget(e.target, deltaX)) return;
+
+  trackSwipe(deltaX < 0 ? "left" : "right", Math.abs(deltaX));
+
+  clearTimeout(inactivityTimeout);
+  inactivityTimeout = setTimeout(resetSwipe, GESTURE_GAP_MS);
+}
+
+function connectToExtension() {
+  chrome.storage.sync.get({ animationsEnabled: true }, (settings) => {
+    animationsEnabled = settings.animationsEnabled;
+  });
+
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== "sync" || !changes.animationsEnabled) return;
+    animationsEnabled = changes.animationsEnabled.newValue;
+    if (!animationsEnabled) resetSwipe();
+  });
+
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "checkStatus") sendResponse({ active: true });
+  });
+}
+
+function teardown() {
+  document.removeEventListener("wheel", handleWheelEvent);
+  clearTimeout(inactivityTimeout);
+  clearTimeout(armTimeout);
+  document.querySelectorAll("#leftArrow, #rightArrow").forEach((el) => el.remove());
+}
+
+function init() {
+  // retire any instance left behind by an extension update or re-injection
+  document.dispatchEvent(new Event(TEARDOWN_EVENT));
+  document.querySelectorAll("#leftArrow, #rightArrow").forEach((el) => el.remove());
+  document.addEventListener(TEARDOWN_EVENT, teardown, { once: true });
+
+  createArrow("left");
+  createArrow("right");
+  resetSwipe();
+  document.addEventListener("wheel", handleWheelEvent);
+
+  const [navigationEntry] = performance.getEntriesByType("navigation");
+  if (navigationEntry && navigationEntry.type === "back_forward") {
+    expectMomentumTail();
+  }
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) expectMomentumTail();
+  });
+
+  if (!isExtension) return;
+
+  try {
+    connectToExtension();
+  } catch {
+    // extension context invalidated between the isExtension check and here
+    // (e.g. this tab was open when the extension was updated or reloaded)
   }
 }
 
-window.addEventListener("beforeunload", () => {
-  document.removeEventListener("mousewheel", () => {
-    if (window.visualViewport.scale === 1) {
-      handleWheelEvent;
-    }
-  });
-});
-
-// to isolate and view the animation itself
-// showAnimation(0, "leftArrow", true);
-// document.getElementById("leftArrow").style.transform = `translate(${500}px)`;
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}

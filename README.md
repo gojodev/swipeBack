@@ -1,3 +1,6 @@
+# todo
+- you can't let the users perform the swipeback gesture when the current window is zoomed or minised
+
 ```
 swipeBack
 ├─ background.js
@@ -14,8 +17,9 @@ swipeBack
 ├─ page2.html
 ├─ page3.html
 ├─ popup.html
+├─ popup.js
 ├─ popup_style.css
 ├─ README.md
-├─ style.css
-└─ test.js
+└─ style.css
+
 ```
